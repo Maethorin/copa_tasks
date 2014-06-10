@@ -3,16 +3,29 @@ from datetime import timedelta
 
 __author__ = 'maethorin'
 
+SECRET_KEY = 't7i#g(6t%sp7&-4a$(hfderfa-b6(!i^z2^a)!a1#+8cpif6r)'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'tabela_copa',
+        'USER': 'copa',
+        'PASSWORD': 'AcopaéN0ssa!',
+        'HOST': 'localhost',
+        'PORT': '3306'
+    }
+}
+
 INSTALLED_APPS = (
     'hamsters.fazendo.classificacao',
 )
-
-CELERYBEAT_SCHEDULE = {
-    'simples': {
-        'task': 'classificacao.simples',
-        'schedule': timedelta(seconds=3)
-    },
-}
+#
+# CELERYBEAT_SCHEDULE = {
+#     'simples': {
+#         'task': 'classificacao.simples',
+#         'schedule': timedelta(seconds=3)
+#     },
+# }
 
 BROKER_URL = 'redis://localhost:6379/0'
 CELERY_TIMEZONE = 'America/Sao_Paulo'
@@ -24,4 +37,18 @@ CELERY_DEFAULT_QUEUE = 'hamstersapp.    '
 REDIS = {
     'HOST': 'localhost',
     'PORT': '6379'
+}
+
+URL_BASE_DE_RESULTADOS = "http://globoesporte.globo.com/servico/esportes_campeonato/widget-uuid/c36d99dd-918a-459f-bf0c-648dec5773af/fases"
+URL_RESULTADOS_DE_CLASSIFICACAO = "/fase-grupos-copa-do-mundo-2014/grupo/{}/rodada/{}/jogos.html"
+URL_RESULTADOS_DE_MATA_MATA = "/oitavas-copa-do-mundo-2014/classsificacao.html"
+URL_DE_GRUPOS = {
+    "A": "1069",
+    "B": "1070",
+    "C": "1071",
+    "D": "1072",
+    "E": "1073",
+    "F": "1074",
+    "G": "1075",
+    "H": "1166",
 }

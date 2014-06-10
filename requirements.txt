@@ -1,4 +1,13 @@
 celery
 redis
-flask
+Django
+South
+MySql-python
 flower
+lxml
+cssselect
+mox
+mock
+nose
+sure
+six
