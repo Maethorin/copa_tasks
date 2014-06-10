@@ -27,4 +27,4 @@ def obtem_ids_de_partida_de_regra(regra):
 
 
 def eh_disputa_de_terceiro_lugar(regra):
-    return re.match(r"P", regra) != None
+    return re.match(r"P", regra) is not None

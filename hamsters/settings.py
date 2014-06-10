@@ -16,6 +16,8 @@ DATABASES = {
     }
 }
 
+SERVER_TIME_DIFF = 0
+
 INSTALLED_APPS = (
     'hamsters.fazendo.classificacao',
 )

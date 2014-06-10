@@ -6,18 +6,21 @@ from hamsters.fazendo.classificacao import parser_regra
 from hamsters.fazendo.models import Time, Partida
 
 
-def obtem_times_de_partida_de_oitavas(regra):
+def obtem_times_de_partida_de_oitavas(regra, realizada):
     grupos = parser_regra.obtem_grupos_de_regra(regra)
     classificacoes = parser_regra.obtem_classificacoes_de_regra(regra)
-    time1 = obtem_time_do_grupo_na_classificacao(grupos[0], classificacoes[0])
-    time2 = obtem_time_do_grupo_na_classificacao(grupos[1], classificacoes[1])
+    time1 = obtem_time_do_grupo_na_classificacao(grupos[0], classificacoes[0], realizada)
+    time2 = obtem_time_do_grupo_na_classificacao(grupos[1], classificacoes[1], realizada)
     return time1, time2
 
 
-def obtem_time_do_grupo_na_classificacao(nome_do_grupo, posicao):
+def obtem_time_do_grupo_na_classificacao(nome_do_grupo, posicao, realizada):
     try:
-        return Time.objects.get(grupo__nome=nome_do_grupo, posicao=int(posicao))
-    except ObjectDoesNotExist:
+        if realizada:
+            return Time.objects.get(grupo__nome=nome_do_grupo, classificacao_real__posicao=int(posicao))
+        else:
+            return Time.objects.get(grupo__nome=nome_do_grupo, classificacao_simulada__posicao=int(posicao))
+    except Time.DoesNotExist:
         return None
 
 
@@ -26,12 +29,12 @@ def obtem_times_de_partida_de_outras_fases(regra):
     partida1 = Partida.objects.get(id=ids[0])
     partida2 = Partida.objects.get(id=ids[1])
     perdedor = parser_regra.eh_disputa_de_terceiro_lugar(regra)
-# if partida1.fase.nome == 'Oitavas':
-#     partida1.time_1, partida1.time_2 = obtem_times_de_partida_de_oitavas(partida1.regra_para_times)
-#     partida2.time_1, partida2.time_2 = obtem_times_de_partida_de_oitavas(partida2.regra_para_times)
-# else:
-    partida1.time_1, partida1.time_2 = obtem_times_de_partida_de_outras_fases(partida1.regra_para_times)
-    partida2.time_1, partida2.time_2 = obtem_times_de_partida_de_outras_fases(partida2.regra_para_times)
+    if partida1.fase.nome == 'Oitavas':
+        partida1.time_1, partida1.time_2 = obtem_times_de_partida_de_oitavas(partida1.regra_para_times, partida1.realizada)
+        partida2.time_1, partida2.time_2 = obtem_times_de_partida_de_oitavas(partida2.regra_para_times, partida2.realizada)
+    else:
+        partida1.time_1, partida1.time_2 = obtem_times_de_partida_de_outras_fases(partida1.regra_para_times)
+        partida2.time_1, partida2.time_2 = obtem_times_de_partida_de_outras_fases(partida2.regra_para_times)
     time1, gols_time_1, gols_time_2 = obter_time_na_partida(partida1, perdedor)
     time2, gols_time_1, gols_time_2 = obter_time_na_partida(partida2, perdedor)
 
