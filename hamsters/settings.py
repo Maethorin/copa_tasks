@@ -33,13 +33,14 @@ CELERYBEAT_SCHEDULE = {
     },
     'grava-partidas-em-andamento': {
         'task': 'classificacao.grava_partidas_em_andamento',
-        'schedule': timedelta(seconds=20)
+        'schedule': timedelta(seconds=5)
     },
 }
 
-BROKER_URL = 'redis://localhost:6379/0'
-CELERY_ENABLE_UTC = False
 CELERY_TIMEZONE = 'America/Sao_Paulo'
+USE_TZ = True
+
+BROKER_URL = 'redis://localhost:6379/0'
 CELERY_ACCEPT_CONTENT = ['pickle']
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 CELERY_TASK_RESULT_EXPIRES = 1800

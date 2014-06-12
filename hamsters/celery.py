@@ -6,7 +6,7 @@ import sys
 __author__ = 'maethorin'
 import os
 
-from django.conf import settings
+from hamsters import settings
 from celery import Celery
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -16,7 +16,7 @@ site.addsitedir(path('../tasks'))
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'hamsters.settings')
 app = Celery('hamsters')
-app.config_from_object('django.conf:settings')
+app.config_from_object(settings, force=True)
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 
 

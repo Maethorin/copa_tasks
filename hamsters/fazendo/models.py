@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from django.conf import settings
 from django.db import models
 from django.db.models import Q
+import pytz
 
 
 class Grupo(models.Model):
@@ -200,8 +201,8 @@ class Partida(models.Model):
         db_table = 'partidas'
 
     def formatado_para_placar(self):
-        time_1 = "Não definido"
-        time_2 = "Não definido"
+        time_1 = u"Não definido"
+        time_2 = u"Não definido"
         if self.time_1:
             time_1 = self.time_1.nome
         if self.time_2:
@@ -256,7 +257,7 @@ class Partida(models.Model):
         return self.media_palpites_time_1() == int(self.gols_time_1 or 0) and self.media_palpites_time_2() == int(self.gols_time_2)
 
     def em_andamento(self):
-        data_atual = datetime.today()
+        data_atual = datetime.now(pytz.timezone('America/Sao_Paulo'))
         data_atual = data_atual + timedelta(hours=settings.SERVER_TIME_DIFF)
         data_limite = self.data + timedelta(minutes=-3)
         if data_limite <= data_atual and not self.realizada:
