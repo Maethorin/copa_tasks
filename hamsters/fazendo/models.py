@@ -200,7 +200,13 @@ class Partida(models.Model):
         db_table = 'partidas'
 
     def formatado_para_placar(self):
-        return u"{} x {}".format(self.time_1.nome, self.time_2.nome)
+        time_1 = "Não definido"
+        time_2 = "Não definido"
+        if self.time_1:
+            time_1 = self.time_1.nome
+        if self.time_2:
+            time_2 = self.time_2.nome
+        return u"{} x {}".format(time_1, time_2)
 
     def __unicode__(self):
         formato_data = '%a %d %B - %H:%M'
