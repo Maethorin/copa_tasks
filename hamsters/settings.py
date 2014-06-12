@@ -23,9 +23,14 @@ INSTALLED_APPS = (
 )
 
 CELERYBEAT_SCHEDULE = {
-    'classificar-times': {
+    'classificar-simulada': {
         'task': 'classificacao.classificar_times',
         'schedule': timedelta(seconds=40)
+    },
+    'classificar-real': {
+        'task': 'classificacao.classificar_times',
+        'schedule': timedelta(minutes=5),
+        'args': (True, )
     },
     'definir-times-em-partidas': {
         'task': 'classificacao.definir_times_em_partidas',
