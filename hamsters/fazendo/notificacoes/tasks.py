@@ -15,3 +15,9 @@ def inicio_jogo():
 @task(name='notificacoes.placar_igual')
 def placar_igual():
     pass
+
+
+@task(name='notificacoes.fim_jogo')
+def fim_jogo():
+    pass
+
