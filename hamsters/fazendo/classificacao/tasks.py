@@ -51,5 +51,5 @@ def grava_partidas_em_andamento():
                 partida.gols_time_2 = informacoes.gols_time_2
                 partida.realizada = informacoes.realizada
                 partida.save()
-                logger.info("Placar de {} atualizado".format(partida.formatado_para_placar(), "Em Andamento" if partida.em_andamento() else "Agendada"))
+                logger.info("Placar de {} atualizado".format(partida.formatado_para_placar()))
     return True
