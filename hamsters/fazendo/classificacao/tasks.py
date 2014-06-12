@@ -43,12 +43,13 @@ def definir_times_em_partidas():
 @task(name='classificacao.grava_partidas_em_andamento')
 def grava_partidas_em_andamento():
     for partida in Partida.objects.all():
-        logger.info("Partida {} está {}".format(partida, "Em Andamento" if partida.em_andamento() else "Agendada"))
+        logger.info("Partida {} está {}".format(partida.formatado_para_placar(), "Em Andamento" if partida.em_andamento() else "Agendada"))
         if partida.em_andamento():
             informacoes = em_andamento.obter_informacoes_da_partida_em_jogo(partida)
             if informacoes:
                 partida.gols_time_1 = informacoes.gols_time_1
                 partida.gols_time_2 = informacoes.gols_time_2
                 partida.realizada = informacoes.realizada
-            partida.save()
+                partida.save()
+                logger.info("Placar de {} atualizado".format(partida.formatado_para_placar(), "Em Andamento" if partida.em_andamento() else "Agendada"))
     return True

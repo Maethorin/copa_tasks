@@ -33,7 +33,7 @@ CELERYBEAT_SCHEDULE = {
     },
     'grava-partidas-em-andamento': {
         'task': 'classificacao.grava_partidas_em_andamento',
-        'schedule': timedelta(minutes=30)
+        'schedule': timedelta(seconds=20)
     },
 }
 
