@@ -21,13 +21,21 @@ SERVER_TIME_DIFF = 0
 INSTALLED_APPS = (
     'hamsters.fazendo.classificacao',
 )
-#
-# CELERYBEAT_SCHEDULE = {
-#     'simples': {
-#         'task': 'classificacao.simples',
-#         'schedule': timedelta(seconds=3)
-#     },
-# }
+
+CELERYBEAT_SCHEDULE = {
+    'classificar-times': {
+        'task': 'classificacao.classificar_times',
+        'schedule': timedelta(seconds=40)
+    },
+    'definir-times-em-partidas': {
+        'task': 'classificacao.definir_times_em_partidas',
+        'schedule': timedelta(seconds=45)
+    },
+    'grava-partidas-em-andamento': {
+        'task': 'classificacao.grava_partidas_em_andamento',
+        'schedule': timedelta(minutes=30)
+    },
+}
 
 BROKER_URL = 'redis://localhost:6379/0'
 CELERY_TIMEZONE = 'America/Sao_Paulo'
