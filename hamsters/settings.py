@@ -38,6 +38,7 @@ CELERYBEAT_SCHEDULE = {
 }
 
 BROKER_URL = 'redis://localhost:6379/0'
+CELERY_ENABLE_UTC = False
 CELERY_TIMEZONE = 'America/Sao_Paulo'
 CELERY_ACCEPT_CONTENT = ['pickle']
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
