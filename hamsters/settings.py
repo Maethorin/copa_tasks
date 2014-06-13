@@ -25,22 +25,22 @@ INSTALLED_APPS = (
 )
 
 CELERYBEAT_SCHEDULE = {
-    'classificar-simulada': {
-        'task': 'classificacao.classificar_times',
-        'schedule': timedelta(seconds=40)
-    },
-    'classificar-real': {
-        'task': 'classificacao.classificar_times',
-        'schedule': timedelta(minutes=5),
-        'args': (True, )
-    },
-    'definir-times-em-partidas': {
-        'task': 'classificacao.definir_times_em_partidas',
-        'schedule': timedelta(seconds=45)
-    },
+    # 'classificar-simulada': {
+    #     'task': 'classificacao.classificar_times',
+    #     'schedule': timedelta(seconds=40)
+    # },
+    # 'classificar-real': {
+    #     'task': 'classificacao.classificar_times',
+    #     'schedule': timedelta(minutes=5),
+    #     'args': (True, )
+    # },
+    # 'definir-times-em-partidas': {
+    #     'task': 'classificacao.definir_times_em_partidas',
+    #     'schedule': timedelta(seconds=45)
+    # },
     'grava-partidas-em-andamento': {
         'task': 'classificacao.grava_partidas_em_andamento',
-        'schedule': timedelta(seconds=20)
+        'schedule': timedelta(seconds=10)
     },
     # 'notificacao-inicio-partida': {
     #     'task': 'notificacoes.inicio_jogo',
@@ -49,7 +49,7 @@ CELERYBEAT_SCHEDULE = {
 }
 
 CELERY_TIMEZONE = 'America/Sao_Paulo'
-USE_TZ = True
+TIME_ZONE = 'America/Sao_Paulo'
 
 BROKER_URL = 'redis://localhost:6379/0'
 CELERY_ACCEPT_CONTENT = ['pickle']
