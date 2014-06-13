@@ -6,6 +6,8 @@ MySql-python
 flower
 lxml
 cssselect
+requests
+
 mox
 mock
 nose

@@ -20,6 +20,10 @@ class Grupo(models.Model):
     def __unicode__(self):
         return "Grupo {}".format(self.nome)
 
+    @property
+    def path(self):
+        return "grupo/{}/".format(self.nome)
+
     def times_por_classificacao_simulada(self):
         return self.time_set.all().order_by('classificacao_simulada__posicao')
 

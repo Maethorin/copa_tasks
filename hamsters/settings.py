@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from datetime import timedelta
+import os
 
 __author__ = 'maethorin'
 
+HOST = "http://www.simuladorcopadomundo.com.br/"
 SECRET_KEY = 't7i#g(6t%sp7&-4a$(hfderfa-b6(!i^z2^a)!a1#+8cpif6r)'
 
 DATABASES = {
@@ -40,6 +42,10 @@ CELERYBEAT_SCHEDULE = {
         'task': 'classificacao.grava_partidas_em_andamento',
         'schedule': timedelta(seconds=20)
     },
+    'notificacao-inicio-partida': {
+        'task': 'notificacoes.inicio_jogo',
+        'schedule': timedelta(minutes=1)
+    },
 }
 
 CELERY_TIMEZONE = 'America/Sao_Paulo'
@@ -69,3 +75,8 @@ URL_DE_GRUPOS = {
     "G": "1075",
     "H": "1166",
 }
+
+FACEBOOK_GRAPH_API = "https://graph.facebook.com/v2.0"
+FACEBOOK_PAGE_ID = os.environ.get('FACEBOOK_PAGE_ID', None)
+FACEBOOK_PAGE_ACCESS_TOKEN = os.environ.get('FACEBOOK_PAGE_ACCESS_TOKEN', None)
+
