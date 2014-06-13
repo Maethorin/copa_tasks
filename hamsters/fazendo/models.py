@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from django.conf import settings
 from django.db import models
 from django.db.models import Q
+from django.utils.text import slugify
 import pytz
 
 
@@ -211,6 +212,15 @@ class Partida(models.Model):
             time_1 = self.time_1.nome
         if self.time_2:
             time_2 = self.time_2.nome
+        return u"{} x {}".format(time_1, time_2)
+
+    def formatado_para_url(self):
+        time_1 = ""
+        time_2 = ""
+        if self.time_1:
+            time_1 = slugify(self.time_1.nome).lower()
+        if self.time_2:
+            time_2 = slugify(self.time_2.nome).lower()
         return u"{} x {}".format(time_1, time_2)
 
     def __unicode__(self):

@@ -42,10 +42,10 @@ CELERYBEAT_SCHEDULE = {
         'task': 'classificacao.grava_partidas_em_andamento',
         'schedule': timedelta(seconds=20)
     },
-    'notificacao-inicio-partida': {
-        'task': 'notificacoes.inicio_jogo',
-        'schedule': timedelta(minutes=1)
-    },
+    # 'notificacao-inicio-partida': {
+    #     'task': 'notificacoes.inicio_jogo',
+    #     'schedule': timedelta(minutes=1)
+    # },
 }
 
 CELERY_TIMEZONE = 'America/Sao_Paulo'
@@ -63,6 +63,7 @@ REDIS = {
 }
 
 URL_BASE_DE_RESULTADOS = "http://globoesporte.globo.com/servico/esportes_campeonato/widget-uuid/c36d99dd-918a-459f-bf0c-648dec5773af/fases"
+URL_TEMPO_REAL = "http://globoesporte.globo.com/futebol/copa-do-mundo/temporeal/{}/{}/"
 URL_RESULTADOS_DE_CLASSIFICACAO = "/fase-grupos-copa-do-mundo-2014/grupo/{}/rodada/{}/jogos.html"
 URL_RESULTADOS_DE_MATA_MATA = "/oitavas-copa-do-mundo-2014/classsificacao.html"
 URL_DE_GRUPOS = {

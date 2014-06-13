@@ -28,6 +28,19 @@ def obter_informacoes_da_partida_em_jogo(partida):
     return obtem_placar_do_html(pagina_resultado, partida)
 
 
+def obter_de_tempo_real(partida):
+    data = partida.data.strftime("%Y-%m-%d")
+    times = partida.formatado_para_url()
+    try:
+        url = settings.URL_TEMPO_REAL.format(data, times)
+        pagina_resultado = lhtml.parse(url).getroot()
+    except IOError:
+        return None
+    if pagina_resultado is None:
+        return None
+    return obtem_placar_do_html_tempo_real(pagina_resultado, partida)
+
+
 def obter_rodada(partida):
     if 12 <= partida.data.day <= 16:
         return "1"
@@ -49,4 +62,10 @@ def obtem_placar_do_html(pagina_resultado, partida):
             gols_time_1 = equipe.getparent().getparent().cssselect(".placar-mandante")[0].text
         elif equipe.text == partida.time_2.abreviatura:
             gols_time_2 = equipe.getparent().getparent().cssselect(".placar-visitante")[0].text
+    return InformacoesDePartida(gols_time_1, gols_time_2)
+
+
+def obtem_placar_do_html_tempo_real(pagina_resultado, partida):
+    gols_time_1 = pagina_resultado.cssselect(".meio-placar .numero-gols-time-mandante")[0].text or 0
+    gols_time_2 = pagina_resultado.cssselect(".meio-placar .numero-gols-time-visitante")[0].text or 0
     return InformacoesDePartida(gols_time_1, gols_time_2)
