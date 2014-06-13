@@ -43,7 +43,7 @@ def definir_times_em_partidas():
 @task(name='classificacao.grava_partidas_em_andamento')
 def grava_partidas_em_andamento():
     logger.info(u"Verificando se tem partidas em andamento")
-    for partida in Partida.objects.all():
+    for partida in Partida.objects.filter(realizada=False):
         if partida.em_andamento():
             informacoes = em_andamento.obter_informacoes_da_partida_em_jogo(partida)
             if informacoes:
