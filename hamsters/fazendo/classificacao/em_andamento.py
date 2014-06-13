@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # encoding: utf-8
+import json
 
 from lxml import html as lhtml
+import requests
 
 from hamsters import settings
 
@@ -10,7 +12,19 @@ class InformacoesDePartida():
     def __init__(self, gols_time_1=0, gols_time_2=0, status="Tá Indo"):
         self.gols_time_1 = gols_time_1 or '0'
         self.gols_time_2 = gols_time_2 or '0'
-        self.realizada = status == 'Finished'
+        self.realizada = status == 'Encerrada'
+
+
+def obter_informacoes_da_partida_em_jogo_pelo_tempo_real(partida):
+    resultado = requests.get(settings.URL_TEMPO_REAL_CENTRAL)
+    resultado = json.loads(resultado.content)
+    jogo_atual = None
+    for jogo in resultado['jogos']:
+        if jogo['time_casa']['sigla'] == partida.time_1.abreviatura:
+            jogo_atual = jogo
+    if jogo_atual:
+        return InformacoesDePartida(jogo_atual["time_casa"]["placar"], jogo_atual["time_visitante"]["placar"], jogo_atual['status'])
+    return None
 
 
 def obter_informacoes_da_partida_em_jogo(partida):

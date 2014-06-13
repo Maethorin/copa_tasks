@@ -45,7 +45,7 @@ def grava_partidas_em_andamento():
     logger.info(u"Verificando se tem partidas em andamento")
     for partida in Partida.objects.filter(realizada=False):
         if partida.em_andamento():
-            informacoes = em_andamento.obter_informacoes_da_partida_em_jogo(partida)
+            informacoes = em_andamento.obter_informacoes_da_partida_em_jogo_pelo_tempo_real(partida)
             if informacoes:
                 partida.gols_time_1 = informacoes.gols_time_1
                 partida.gols_time_2 = informacoes.gols_time_2
