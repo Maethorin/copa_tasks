@@ -4,6 +4,7 @@ from redis import Redis
 import requests
 
 from hamsters import settings
+from hamsters.fazendo.models import Partida
 
 
 class Repositorio(object):
@@ -33,10 +34,14 @@ class Facebook(object):
         requests.post("{}/{}/feed?access_token={}".format(settings.FACEBOOK_GRAPH_API, settings.FACEBOOK_PAGE_ID, settings.FACEBOOK_PAGE_ACCESS_TOKEN), data=data)
 
     @classmethod
-    def partida_em_andamento(cls, partida):
+    def partida_em_andamento(cls, partida_id):
+        try:
+            partida = Partida.objects.get(id=partida_id)
+        except Partida.DoesNotExist:
+            return False
+
         mensagem = u"""
 Comeeeeeça {times}!!!
-
 Os palpites desse jogo estão encerrados. O resultado que os votadores esperam é:
 
 {time_1_abreviatura} {palpites_time_1} x {palpites_time_2} {time_2_abreviatura}
@@ -57,3 +62,7 @@ Os palpites desse jogo estão encerrados. O resultado que os votadores esperam �
             return mensagem
         except:
             return False
+
+
+class CeleryClient(object):
+    pass

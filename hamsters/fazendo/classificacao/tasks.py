@@ -4,6 +4,7 @@ from celery.task import task
 from celery.utils.log import get_task_logger
 from hamsters.fazendo.classificacao import classificador, simulador, em_andamento
 from hamsters.fazendo.models import Partida, Grupo
+from hamsters.fazendo.notificacoes.tasks import inicio_jogo, mudanca_de_placar
 
 __author__ = 'maethorin'
 
@@ -43,13 +44,14 @@ def definir_times_em_partidas():
 @task(name='classificacao.grava_partidas_em_andamento')
 def grava_partidas_em_andamento():
     logger.info(u"Verificando se tem partidas em andamento")
-    for partida in Partida.objects.filter(realizada=False):
-        if partida.em_andamento():
-            informacoes = em_andamento.obter_informacoes_da_partida_em_jogo_pelo_tempo_real(partida)
-            if informacoes:
-                partida.gols_time_1 = informacoes.gols_time_1
-                partida.gols_time_2 = informacoes.gols_time_2
-                partida.realizada = informacoes.realizada
-                partida.save()
-                logger.info(u"Placar de {} atualizado".format(partida.formatado_para_placar()))
+    for partida in [partida for partida in Partida.objects.filter(realizada=False) if partida.em_andamento()]:
+        informacoes = em_andamento.obter_informacoes_da_partida_em_jogo_pelo_tempo_real(partida)
+        inicio_jogo(partida.id).delay()
+        if informacoes:
+            # mudanca_de_placar(partida, informacoes).delay()
+            partida.gols_time_1 = informacoes.gols_time_1
+            partida.gols_time_2 = informacoes.gols_time_2
+            partida.realizada = informacoes.realizada
+            partida.save()
+            logger.info(u"Placar de {} atualizado".format(partida.formatado_para_placar()))
     return True

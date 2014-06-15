@@ -14,6 +14,7 @@ class InformacoesDePartida():
         self.gols_time_2 = gols_time_2 or '0'
         self.realizada = status == 'Encerrada'
 
+    
 
 def obter_informacoes_da_partida_em_jogo_pelo_tempo_real(partida):
     resultado = requests.get(settings.URL_TEMPO_REAL_CENTRAL)

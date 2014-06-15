@@ -10,17 +10,16 @@ logger = get_task_logger(__name__)
 
 
 @task(name='notificacoes.inicio_jogo')
-def inicio_jogo():
+def inicio_jogo(partida_id):
     cache = Repositorio()
-    for partida in [partida for partida in Partida.objects.all() if partida.em_andamento()]:
-        if not cache["partida.{}.avisada".format(partida.id)]:
-            sucesso = Facebook.partida_em_andamento(partida)
-            logger.info(sucesso['message'])
-            cache["partida.{}.avisada".format(partida.id)] = True
+    if not cache["partida.{}.inicio_notificado".format(partida_id)]:
+        sucesso = Facebook.partida_em_andamento(partida_id)
+        logger.info(sucesso['message'].replace("\n", " "))
+        cache["partida.{}.inicio_notificado".format(partida_id)] = True
 
 
-@task(name='notificacoes.placar_igual')
-def placar_igual():
+@task(name='notificacoes.mudanca_de_placar')
+def mudanca_de_placar(partida, informacoes):
     pass
 
 
