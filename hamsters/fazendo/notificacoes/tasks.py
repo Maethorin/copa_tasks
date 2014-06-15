@@ -13,10 +13,13 @@ logger = get_task_logger(__name__)
 def inicio_jogo(partida_id):
     cache = Repositorio()
     if not cache["partida.{}.inicio_notificado".format(partida_id)]:
-        sucesso = Facebook.partida_em_andamento(partida_id)
-        logger.info(sucesso['message'].replace("\n", " "))
-        cache["partida.{}.inicio_notificado".format(partida_id)] = True
-
+        retorno, mensagem = Facebook.partida_em_andamento(partida_id)
+        if retorno.status_code == 200:
+            logger.info(mensagem['message'].replace("\n", " "))
+            cache["partida.{}.inicio_notificado".format(partida_id)] = True
+        else:
+            logger.error(retorno.content)
+    return "Finalizado"
 
 @task(name='notificacoes.mudanca_de_placar')
 def mudanca_de_placar(partida, informacoes):

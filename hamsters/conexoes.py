@@ -29,9 +29,15 @@ class Repositorio(object):
 
 class Facebook(object):
 
+    FEED_POST_URL = "{}/{}/feed?access_token={}".format(settings.FACEBOOK_GRAPH_API, settings.FACEBOOK_PAGE_ID, settings.FACEBOOK_PAGE_ACCESS_TOKEN)
+    HAMSTERS_PREGUICOSOS = {
+        "message": "Os hamsters do Simulador da Copa do Mundo andam preguiços. Já encomendamos 2 tonelada de semente de girassol e em breve eles estarão informando corretamente sobre as partidas em andamento! :D",
+        "link": "http://www.simuladorcopadomundo.com.br"
+    }
+
     @classmethod
     def post(cls, data):
-        requests.post("{}/{}/feed?access_token={}".format(settings.FACEBOOK_GRAPH_API, settings.FACEBOOK_PAGE_ID, settings.FACEBOOK_PAGE_ACCESS_TOKEN), data=data)
+        return requests.post(cls.FEED_POST_URL, data=data)
 
     @classmethod
     def partida_em_andamento(cls, partida_id):
@@ -58,10 +64,17 @@ Os palpites desse jogo estão encerrados. O resultado que os votadores esperam �
             "link": "{}{}".format(settings.HOST, partida.time_1.grupo.path)
         }
         try:
-            cls.post(data)
-            return mensagem
+            retorno = cls.post(data)
+            return retorno, mensagem
         except:
             return False
+
+    @classmethod
+    def obtem_access_token(cls, temporary_access_token):
+        url = "{}/oauth/access_token?grant_type=fb_exchange_token&client_id={}&client_secret={}&fb_exchange_token={}"
+        app_id = settings.FACEBOOK_APP_ID
+        app_scret = settings.FACEBOOK_APP_SECRET
+        return requests.get(url.format(settings.FACEBOOK_GRAPH_API, app_id, app_scret, temporary_access_token))
 
 
 class CeleryClient(object):
