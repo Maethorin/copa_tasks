@@ -16,11 +16,10 @@ def inicio_jogo(partida_id):
     if not cache["partida.{}.inicio_notificado".format(partida_id)]:
         retorno, mensagem = Facebook.partida_em_andamento(partida_id)
         if retorno.status_code == 200:
-            logger.info(mensagem['message'].replace("\n", " "))
             cache["partida.{}.inicio_notificado".format(partida_id)] = True
+            logger.info(mensagem.replace("\n", " "))
         else:
             logger.error(retorno.content)
-            logger.error(settings.FACEBOOK_PAGE_ACCESS_TOKEN)
     return "Finalizado"
 
 @task(name='notificacoes.mudanca_de_placar')
