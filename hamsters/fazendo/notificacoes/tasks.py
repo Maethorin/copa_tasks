@@ -1,5 +1,6 @@
 from celery.task import task
 from celery.utils.log import get_task_logger
+from hamsters import settings
 from hamsters.conexoes import Repositorio, Facebook
 from hamsters.fazendo.models import Partida
 
@@ -19,6 +20,7 @@ def inicio_jogo(partida_id):
             cache["partida.{}.inicio_notificado".format(partida_id)] = True
         else:
             logger.error(retorno.content)
+            logger.error(settings.FACEBOOK_PAGE_ACCESS_TOKEN)
     return "Finalizado"
 
 @task(name='notificacoes.mudanca_de_placar')
