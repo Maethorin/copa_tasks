@@ -9,16 +9,18 @@ from hamsters import settings
 
 
 class InformacoesDePartida():
-    def __init__(self, gols_time_1=0, gols_time_2=0, partida=None, status="Tá Indo"):
-        self.gols_time_1 = gols_time_1 or '0'
-        self.gols_time_2 = gols_time_2 or '0'
+    def __init__(self, gols_time_1, gols_time_2, partida, status="Tá Indo"):
+        self.gols_time_1 = gols_time_1 or 0
+        self.gols_time_2 = gols_time_2 or 0
         self.realizada = status == 'Encerrada'
         self.mudou_o_placar = False
         self.time_gol = ""
-        if partida.gols_time_1 != self.gols_time_1:
+        partida_gols_time_1 = partida.gols_time_1 or 0
+        partida_gols_time_2 = partida.gols_time_2 or 0
+        if partida_gols_time_1 != self.gols_time_1:
             self.mudou_o_placar = True
             self.time_gol = partida.time_1.nome
-        if partida.gols_time_1 != self.gols_time_1:
+        elif partida_gols_time_2 != self.gols_time_2:
             self.mudou_o_placar = True
             self.time_gol = partida.time_2.nome
 
