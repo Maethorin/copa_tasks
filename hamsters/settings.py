@@ -47,7 +47,7 @@ CELERYBEAT_SCHEDULE = {
     },
     'palpites-certos': {
         'task': 'notificacoes.palpites_certos',
-        'schedule': crontab(hour='10,16')
+        'schedule': crontab(minute=0, hour='10,16')
     }
 }
 
