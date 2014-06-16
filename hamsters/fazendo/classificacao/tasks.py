@@ -58,3 +58,13 @@ def grava_partidas_em_andamento():
             partida.save()
             logger.info(u"Placar de {} atualizado".format(partida.formatado_para_placar()))
     return True
+
+
+@task(name='classificacao.finaliza_partida')
+def finaliza_partida(partida_id):
+    partida = Partida.objects.get(id=partida_id)
+    if not partida.realizada:
+        fim_de_jogo.delay(partida.id)
+        partida.realizada = True
+        partida.save()
+    return "Partida {} finalizada".format(partida)
