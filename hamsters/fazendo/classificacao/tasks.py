@@ -4,7 +4,7 @@ from celery.task import task
 from celery.utils.log import get_task_logger
 from hamsters.fazendo.classificacao import classificador, simulador, em_andamento
 from hamsters.fazendo.models import Partida, Grupo
-from hamsters.fazendo.notificacoes.tasks import inicio_jogo, mudanca_de_placar
+from hamsters.fazendo.notificacoes.tasks import inicio_jogo, mudanca_de_placar, fim_de_jogo
 
 __author__ = 'maethorin'
 
@@ -48,7 +48,10 @@ def grava_partidas_em_andamento():
         informacoes = em_andamento.obter_informacoes_da_partida_em_jogo_pelo_tempo_real(partida)
         inicio_jogo.delay(partida.id)
         if informacoes:
-            # mudanca_de_placar(partida, informacoes).delay()
+            if informacoes.mudou_o_placar:
+                mudanca_de_placar.delay(partida.id, informacoes.to_dict())
+            if informacoes.realizada:
+                fim_de_jogo.delay(partida.id)
             partida.gols_time_1 = informacoes.gols_time_1
             partida.gols_time_2 = informacoes.gols_time_2
             partida.realizada = informacoes.realizada

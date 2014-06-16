@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
+
 from datetime import timedelta
 import os
+from celery.schedules import crontab
 
 __author__ = 'maethorin'
 
@@ -40,12 +43,12 @@ CELERYBEAT_SCHEDULE = {
     },
     'grava-partidas-em-andamento': {
         'task': 'classificacao.grava_partidas_em_andamento',
-        'schedule': timedelta(minutes=1)
+        'schedule': timedelta(seconds=45)
     },
-    # 'notificacao-inicio-partida': {
-    #     'task': 'notificacoes.inicio_jogo',
-    #     'schedule': timedelta(minutes=1)
-    # },
+    'palpites-certos': {
+        'task': 'notificacoes.palpites_certos',
+        'schedule': crontab(hour='10,16')
+    }
 }
 
 CELERY_TIMEZONE = 'America/Sao_Paulo'
@@ -85,3 +88,5 @@ FACEBOOK_APP_SECRET = os.environ.get('FACEBOOK_APP_SECRET', None)
 FACEBOOK_USER_ID = os.environ.get('FACEBOOK_USER_ID', None)
 FACEBOOK_PAGE_ID = os.environ.get('FACEBOOK_PAGE_ID', None)
 FACEBOOK_PAGE_ACCESS_TOKEN = os.environ.get('FACEBOOK_PAGE_ACCESS_TOKEN', None)
+
+DEBUG = False

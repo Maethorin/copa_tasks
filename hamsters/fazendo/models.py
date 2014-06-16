@@ -205,6 +205,13 @@ class Partida(models.Model):
         verbose_name_plural = 'Partidas'
         db_table = 'partidas'
 
+    @classmethod
+    def proximas(cls):
+        return [
+            partida for partida in
+            Partida.objects.filter(realizada=False).order_by('data')[:4] if not partida.em_andamento()
+        ]
+
     def formatado_para_placar(self):
         time_1 = u"Não definido"
         time_2 = u"Não definido"
@@ -214,14 +221,29 @@ class Partida(models.Model):
             time_2 = self.time_2.nome
         return u"{} x {}".format(time_1, time_2)
 
-    def formatado_para_url(self):
-        time_1 = ""
-        time_2 = ""
+    def formatado_para_placar_com_gols(self, palpites=True):
+        time_1 = u"Não definido"
+        time_2 = u"Não definido"
+        gols_time_1 = self.gols_time_1 or 0
+        gols_time_2 = self.gols_time_2 or 0
         if self.time_1:
-            time_1 = slugify(self.time_1.nome).lower()
+            time_1 = self.time_1.nome
         if self.time_2:
-            time_2 = slugify(self.time_2.nome).lower()
-        return u"{} x {}".format(time_1, time_2)
+            time_2 = self.time_2.nome
+        if palpites:
+            gols_time_1 = self.media_palpites_time_1()
+            gols_time_2 = self.media_palpites_time_2()
+
+        return u"{} {} x {} {}".format(time_1, gols_time_1, gols_time_2, time_2)
+
+    # def formatado_para_url(self):
+    #     time_1 = ""
+    #     time_2 = ""
+    #     if self.time_1:
+    #         time_1 = slugify(self.time_1.nome).lower()
+    #     if self.time_2:
+    #         time_2 = slugify(self.time_2.nome).lower()
+    #     return u"{} x {}".format(time_1, time_2)
 
     def __unicode__(self):
         formato_data = '%a %d %B - %H:%M'
