@@ -85,7 +85,7 @@ Os palpites desse jogo est√£o encerrados. O resultado que os votadores esperam √
                 retorno = cls.posta_mensagem(imagem=imagem, path=partida.time_1.grupo.path)
                 return retorno, imagem
             retorno = cls.posta_mensagem(mensagem=mensagem, path=partida.time_1.grupo.path)
-            return retorno, imagem
+            return retorno, mensagem
         except:
             return False
 
