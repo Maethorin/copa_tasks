@@ -37,29 +37,32 @@ class DebugRequest(object):
 class Facebook(object):
 
     FEED_POST_URL = "{}/{}/feed?access_token={}".format(settings.FACEBOOK_GRAPH_API, settings.FACEBOOK_PAGE_ID, settings.FACEBOOK_PAGE_ACCESS_TOKEN)
+    PHOTO_POST_URL = "{}/{}/photos?access_token={}".format(settings.FACEBOOK_GRAPH_API, settings.FACEBOOK_PAGE_ID, settings.FACEBOOK_PAGE_ACCESS_TOKEN)
     HAMSTERS_PREGUICOSOS = {
         "message": "Os hamsters do Simulador da Copa do Mundo andam preguiços. Já encomendamos 2 tonelada de semente de girassol e em breve eles estarão informando corretamente sobre as partidas em andamento! :D",
         "link": "http://www.simuladorcopadomundo.com.br"
     }
 
     @classmethod
-    def post(cls, data):
+    def post(cls, data, image=False):
         if settings.DEBUG:
             print data
             return DebugRequest()
-
+        if image:
+            return requests.post(cls.PHOTO_POST_URL, data=data)
         return requests.post(cls.FEED_POST_URL, data=data)
 
     @classmethod
-    def posta_mensagem(cls, mensagem="", path="", imagem=""):
+    def posta_mensagem(cls, mensagem="", path="", imagem=False):
         data = {
             "link": "{}{}".format(settings.HOST, path)
         }
         if mensagem:
             data['message'] = mensagem
         if imagem:
-            data['picture'] = imagem
-        return cls.post(data)
+            data['url'] = imagem
+            data['message'] = "Veja mais: {}".format(data['link'])
+        return cls.post(data, image=imagem)
 
     @classmethod
     def partida_em_andamento(cls, partida_id):
@@ -82,9 +85,9 @@ Os palpites desse jogo estão encerrados. O resultado que os votadores esperam �
         })
         try:
             if imagem:
-                retorno = cls.posta_mensagem(imagem=imagem, path=partida.time_1.grupo.path)
+                retorno = cls.posta_mensagem(imagem=imagem, path="agenda")
                 return retorno, imagem
-            retorno = cls.posta_mensagem(mensagem=mensagem, path=partida.time_1.grupo.path)
+            retorno = cls.posta_mensagem(mensagem=mensagem, path="agenda")
             return retorno, mensagem
         except:
             return False
