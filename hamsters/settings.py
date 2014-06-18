@@ -89,4 +89,14 @@ FACEBOOK_USER_ID = os.environ.get('FACEBOOK_USER_ID', None)
 FACEBOOK_PAGE_ID = os.environ.get('FACEBOOK_PAGE_ID', None)
 FACEBOOK_PAGE_ACCESS_TOKEN = os.environ.get('FACEBOOK_PAGE_ACCESS_TOKEN', None)
 
+CAMINHO_IMAGENS = "{}/img_base/".format(os.path.dirname(os.path.realpath(__file__)))
+
+# PROD
+STATIC_ROOT = '/webapps/copa_do_mundo/app/tabela/static/'
+STATIC_URL = 'http://www.simuladorcopadomundo.com.br/static/'
 DEBUG = False
+
+# DEV
+# STATIC_ROOT = '/home/maethorin/projects/copa_do_mundo/tabela/static/'
+# STATIC_URL = 'http://localhost:8000/static/'
+# DEBUG = True

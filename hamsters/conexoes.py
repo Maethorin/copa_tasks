@@ -4,6 +4,7 @@ from redis import Redis
 import requests
 
 from hamsters import settings
+from hamsters.fazendo.imagens import cria_imagem_inicio_jogo
 from hamsters.fazendo.models import Partida
 
 
@@ -50,11 +51,14 @@ class Facebook(object):
         return requests.post(cls.FEED_POST_URL, data=data)
 
     @classmethod
-    def posta_mensagem(cls, mensagem, path=""):
+    def posta_mensagem(cls, mensagem="", path="", imagem=""):
         data = {
-            "message": mensagem,
             "link": "{}{}".format(settings.HOST, path)
         }
+        if mensagem:
+            data['message'] = mensagem
+        if imagem:
+            data['picture'] = imagem
         return cls.post(data)
 
     @classmethod
@@ -64,7 +68,10 @@ class Facebook(object):
         except Partida.DoesNotExist:
             return False
 
-        mensagem = u"""
+        imagem = cria_imagem_inicio_jogo(partida)
+        mensagem = ""
+        if not imagem:
+            mensagem = u"""
 Comeeeeeça {times}!!!
 Os palpites desse jogo estão encerrados. O resultado que os votadores esperam é:
 
@@ -74,8 +81,11 @@ Os palpites desse jogo estão encerrados. O resultado que os votadores esperam �
             "placar_palpites": partida.formatado_para_placar_com_gols()
         })
         try:
-            retorno = cls.posta_mensagem(mensagem, partida.time_1.grupo.path)
-            return retorno, mensagem
+            if imagem:
+                retorno = cls.posta_mensagem(imagem=imagem, path=partida.time_1.grupo.path)
+                return retorno, imagem
+            retorno = cls.posta_mensagem(mensagem=mensagem, path=partida.time_1.grupo.path)
+            return retorno, imagem
         except:
             return False
 

@@ -7,6 +7,8 @@ flower
 lxml
 cssselect
 requests
+Pillow
+python-slugify
 
 mox
 mock
