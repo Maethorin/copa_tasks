@@ -1,19 +1,18 @@
 #!/usr/bin/env python
 # encoding: utf-8
-import logging
 import urllib
 import cStringIO
 from os import path
 
 from PIL import Image
 from slugify import slugify
+from hamsters.fazendo.classificacao.em_andamento import InformacoesDePartida
 
 from hamsters.fazendo.models import Time, Partida
-from hamsters.fazendo.imagens import cria_imagem_inicio_jogo
+from hamsters.fazendo.imagens import cria_imagem_inicio_jogo, cria_imagem_gol, cria_imagem_fim_jogo
 
 __author__ = 'maethorin'
 
-logger = logging
 
 def carregar():
     for time in Time.objects.all():
@@ -37,9 +36,29 @@ def carregar():
             continue
 
 
-def comeeeeca():
-    for partida in Partida.objects.filter(realizada=False)[:1]:
-        if partida.time_1 and partida.time_2:
-            print "IMAGEM: {}".format(partida)
-            cria_imagem_inicio_jogo(partida)
+def inicio(partida_id):
+    partida = Partida.objects.get(id=partida_id)
+    if partida.time_1 and partida.time_2:
+        print "IMAGEM: {}".format(partida)
+        print cria_imagem_inicio_jogo(partida)
+    else:
+        print "falta um dos times"
 
+
+def gol(partida_id, gol_1=1, gol_2=2):
+    partida = Partida.objects.get(id=partida_id)
+    if partida.time_1 and partida.time_2:
+        print "IMAGEM: {}".format(partida)
+        informacoes = InformacoesDePartida(gol_1, gol_2, partida)
+        print cria_imagem_gol(partida, informacoes.to_dict())
+    else:
+        print "falta um dos times"
+
+
+def fim(partida_id):
+    partida = Partida.objects.get(id=partida_id)
+    if partida.time_1 and partida.time_2:
+        print "IMAGEM: {}".format(partida)
+        print cria_imagem_fim_jogo(partida)
+    else:
+        print "falta um dos times"

@@ -221,6 +221,15 @@ class Partida(models.Model):
             time_2 = self.time_2.nome
         return u"{} x {}".format(time_1, time_2)
 
+    def formatado_para_agenda(self):
+        time_1 = u"Não definido"
+        time_2 = u"Não definido"
+        if self.time_1:
+            time_1 = self.time_1.nome
+        if self.time_2:
+            time_2 = self.time_2.nome
+        return u"{} x {} - {}".format(time_1, time_2, self.data.strftime('%a %d %B - %H:%M'))
+
     def formatado_para_placar_com_gols(self, palpites=True):
         time_1 = u"Não definido"
         time_2 = u"Não definido"
@@ -235,15 +244,6 @@ class Partida(models.Model):
             gols_time_2 = self.media_palpites_time_2()
 
         return u"{} {} x {} {}".format(time_1, gols_time_1, gols_time_2, time_2)
-
-    # def formatado_para_url(self):
-    #     time_1 = ""
-    #     time_2 = ""
-    #     if self.time_1:
-    #         time_1 = slugify(self.time_1.nome).lower()
-    #     if self.time_2:
-    #         time_2 = slugify(self.time_2.nome).lower()
-    #     return u"{} x {}".format(time_1, time_2)
 
     def __unicode__(self):
         formato_data = '%a %d %B - %H:%M'
