@@ -41,7 +41,9 @@ def obter_informacoes_da_partida_em_jogo_pelo_tempo_real(partida):
         if jogo['time_casa']['sigla'] == partida.time_1.abreviatura:
             jogo_atual = jogo
     if jogo_atual:
-        return InformacoesDePartida(jogo_atual["time_casa"]["placar"], jogo_atual["time_visitante"]["placar"], partida, jogo_atual['status'])
+        gols_1 = jogo_atual["time_casa"]["penalti"] or jogo_atual["time_casa"]["placar"]
+        gols_2 = jogo_atual["time_visitante"]["penalti"] or jogo_atual["time_visitante"]["placar"]
+        return InformacoesDePartida(gols_1, gols_2, partida, jogo_atual['status'])
     return None
 
 
